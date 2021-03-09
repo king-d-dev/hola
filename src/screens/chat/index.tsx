@@ -24,11 +24,12 @@ LogBox.ignoreLogs(["Setting a timer"]);
 export default function ChatScreen({ route }: ScreenProps) {
   const { room } = route.params;
   const channelRef = useRef<Ably.Types.RealtimeChannelCallbacks>(ably.channels.get(room.id));
-  const [message, setMessage] = useState<string>("");
+  const [textMsg, setTextMsg] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
   async function sendMessage() {
+    const message = textMsg.trim();
     const sentAt = DateTime.now().toString();
 
     setChats([{ room, message, sentAt, sender: user!, id: String(Math.random() * Math.random()) }, ...chats]);
@@ -37,7 +38,7 @@ export default function ChatScreen({ route }: ScreenProps) {
     } catch (e) {
       Alert.alert("Oops", e.message);
     }
-    setMessage("");
+    setTextMsg("");
   }
 
   useEffect(() => {
@@ -87,14 +88,14 @@ export default function ChatScreen({ route }: ScreenProps) {
           autoCapitalize="none"
           autoCorrect={true}
           placeholder="start typing here..."
-          value={message}
-          onChangeText={(text) => setMessage(text.trim())}
+          value={textMsg}
+          onChangeText={(text) => setTextMsg(text)}
           onSubmitEditing={sendMessage}
         />
 
         <TouchableOpacity
           onPress={sendMessage}
-          disabled={!message.trim()}
+          disabled={!textMsg.trim()}
           style={{
             marginLeft: 10,
             backgroundColor: "#50b4f3",

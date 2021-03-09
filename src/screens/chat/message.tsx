@@ -15,15 +15,15 @@ export default function Message({ chat, user }: MessageProps) {
   const sentAt = DateTime.fromISO(chat.sentAt).toLocaleString(DateTime.TIME_SIMPLE);
 
   return (
-    <View style={fromMe && { flexDirection: "row", alignItems: "center" }}>
-      {fromMe && (
+    <View style={!fromMe && { flexDirection: "row", alignItems: "center" }}>
+      {!fromMe && (
         <View style={styles.iconContainer}>
           <Text>{icon}</Text>
         </View>
       )}
 
-      <View style={[styles.messageContainer, fromMe && { backgroundColor: "#cee6f0" }]}>
-        <Text style={{ color: fromMe ? "#000" : "#fff" }}>{chat.message}</Text>
+      <View style={[styles.messageContainer, !fromMe && { backgroundColor: "#cee6f0" }]}>
+        <Text style={{ color: fromMe ? "#fff" : "#000" }}>{chat.message}</Text>
         <Text style={styles.time}>{sentAt}</Text>
       </View>
     </View>
